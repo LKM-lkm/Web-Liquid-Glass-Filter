@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
+import {
   Search,
-  Play, 
-  Pause, 
-  SkipBack, 
-  SkipForward, 
-  Shuffle, 
-  Repeat, 
-  MoreHorizontal, 
-  ListMusic, 
-  Radio, 
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Shuffle,
+  Repeat,
+  MoreHorizontal,
+  ListMusic,
+  Radio,
   Volume2,
   Settings2,
   Droplets,
@@ -40,7 +40,7 @@ import { GlassFilter } from './components/GlassFilter';
 import { HomeUI } from './components/HomeUI';
 
 const SCENES = [
-  { id: 1, url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=2000", name: "优胜美地山谷" },
+  { id: 1, url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=2000", name: "优美山谷" },
   { id: 2, url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=2000", name: "迷雾山脉" },
   { id: 3, url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=2000", name: "深邃森林" },
   { id: 4, url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=2000", name: "高山湖泊" },
@@ -88,18 +88,20 @@ export default function App() {
       {/* Background Layer: Dark premium gradient for landing, scene photo for demo */}
       {!isDemoStarted ? (
         // Premium dark background for landing page
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[#06070a]" />
-          {/* Radial glow blobs */}
-          <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-blue-900/20 blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-15%] w-[60vw] h-[60vw] rounded-full bg-indigo-900/20 blur-[120px]" />
-          <div className="absolute top-[40%] right-[20%] w-[30vw] h-[30vw] rounded-full bg-violet-900/10 blur-[100px]" />
-          {/* Subtle grid */}
+        <div className="absolute inset-0 z-0 bg-[#020202]">
+          {/* Subtle Ambient Lighting */}
+          <div className="absolute top-[-20%] left-[10%] w-[70vw] h-[70vw] rounded-full bg-blue-900/10 blur-[120px] mix-blend-screen" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-indigo-900/10 blur-[120px] mix-blend-screen" />
+
+          {/* Prominent High-Tech Matrix Grid */}
           <div
-            className="absolute inset-0 opacity-[0.04]"
-            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)', backgroundSize: '80px 80px' }}
+            className="absolute inset-0 opacity-30 [mask-image:radial-gradient(circle_at_center,white,transparent_80%)]"
+            style={{
+              backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)`,
+              backgroundSize: '40px 40px'
+            }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#06070a]/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020202]/50 to-[#020202]" />
         </div>
       ) : (
         <AnimatePresence mode="wait">
@@ -111,8 +113,8 @@ export default function App() {
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0 z-0"
           >
-            <img 
-              src={SCENES[activeScene].url} 
+            <img
+              src={SCENES[activeScene].url}
               alt="Background"
               className="w-full h-full object-cover opacity-80"
               referrerPolicy="no-referrer"
@@ -131,19 +133,19 @@ export default function App() {
             </div>
             <span className="text-xl font-bold tracking-tight">LiquidGlass</span>
           </div>
-          
+
           {isDemoStarted && (
             <GlassComponent
               id="nav-pill"
               width="auto"
               height={44}
-              params={{ 
-                blur: 2, 
-                glassThickness: 10, 
-                bezelWidth: 12, 
+              params={{
+                blur: 2,
+                glassThickness: 10,
+                bezelWidth: 12,
                 refractiveIndex: 1.1,
                 specularOpacity: 0.1,
-                radius: 22 
+                radius: 22
               }}
               sceneUrl={SCENES[activeScene].url}
             >
@@ -152,9 +154,8 @@ export default function App() {
                   <button
                     key={ui.id}
                     onClick={() => setActiveUI(ui.id)}
-                    className={`flex items-center gap-2 px-6 h-full rounded-full text-[13px] font-bold transition-all duration-300 ${
-                      activeUI === ui.id ? 'bg-white text-black shadow-xl scale-100' : 'text-white hover:bg-white/10'
-                    }`}
+                    className={`flex items-center gap-2 px-6 h-full rounded-full text-[13px] font-bold transition-all duration-300 ${activeUI === ui.id ? 'bg-white text-black shadow-xl scale-100' : 'text-white hover:bg-white/10'
+                      }`}
                   >
                     <span className={activeUI === ui.id ? 'text-black' : 'text-white'}>{ui.icon}</span>
                     <span className={activeUI === ui.id ? 'text-black' : 'text-white'}>{ui.name}</span>
@@ -166,21 +167,23 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-8">
-          <div className="flex items-center gap-5 text-white/40 font-medium text-sm">
-            <Signal className="w-4 h-4" />
-            <Wifi className="w-4 h-4" />
-            <div className="flex items-center gap-1.5 px-3 py-1 bg-white/5 rounded-full border border-white/5">
-              <span className="text-[11px]">88%</span>
-              <Battery className="w-5 h-5" />
-            </div>
-          </div>
           {isDemoStarted && (
-            <button 
-              onClick={() => setIsControlsOpen(!isControlsOpen)}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all shadow-lg"
-            >
-              <Settings2 className="w-4 h-4 text-white/60" />
-            </button>
+            <>
+              <div className="flex items-center gap-5 text-white/40 font-medium text-sm">
+                <Signal className="w-4 h-4" />
+                <Wifi className="w-4 h-4" />
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-white/5 rounded-full border border-white/5">
+                  <span className="text-[11px]">88%</span>
+                  <Battery className="w-5 h-5" />
+                </div>
+              </div>
+              <button
+                onClick={() => setIsControlsOpen(!isControlsOpen)}
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all shadow-lg"
+              >
+                <Settings2 className="w-4 h-4 text-white/60" />
+              </button>
+            </>
           )}
         </div>
       </header>
@@ -197,8 +200,8 @@ export default function App() {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               className="w-full h-full flex items-center justify-center"
             >
-              <HomeUI 
-                onStart={() => setIsDemoStarted(true)} 
+              <HomeUI
+                onStart={() => setIsDemoStarted(true)}
                 sceneUrl={SCENES[activeScene].url}
               />
             </motion.div>
@@ -215,7 +218,7 @@ export default function App() {
                   <ChevronLeft className="w-5 h-5 text-white/30 group-hover:text-white" />
                 </button>
                 <div className="text-center">
-                  <motion.h2 
+                  <motion.h2
                     key={SCENES[activeScene].name}
                     initial={{ y: 10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -234,7 +237,7 @@ export default function App() {
               <div className="relative w-full flex items-center justify-center min-h-[450px]">
                 <AnimatePresence mode="wait">
                   {activeUI === 'player' && (
-                    <motion.div 
+                    <motion.div
                       key="player-ui"
                       initial={{ scale: 0.9, opacity: 0, y: 30 }}
                       animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -242,15 +245,15 @@ export default function App() {
                       transition={{ type: "spring", damping: 28, stiffness: 350 }}
                       className="w-full flex justify-center px-8"
                     >
-                      <GlassComponent 
+                      <GlassComponent
                         id="player-glass"
                         width="100%"
                         maxWidth={880}
                         height={76}
-                        params={{ 
-                          ...params, 
-                          radius: 38, 
-                          bezelWidth: 28, 
+                        params={{
+                          ...params,
+                          radius: 38,
+                          bezelWidth: 28,
                           glassThickness: 80,
                           refractiveIndex: 1.3
                         }}
@@ -261,7 +264,7 @@ export default function App() {
                           <div className="flex items-center gap-6">
                             <button className="text-white/20 hover:text-white transition-colors"><Shuffle className="w-4 h-4" /></button>
                             <button className="text-white/70 hover:text-white hover:scale-110 transition-all"><SkipBack className="w-5 h-5 fill-current" /></button>
-                            <button 
+                            <button
                               onClick={() => setIsPlaying(!isPlaying)}
                               className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all border border-white/5"
                             >
@@ -270,7 +273,7 @@ export default function App() {
                             <button className="text-white/70 hover:text-white hover:scale-110 transition-all"><SkipForward className="w-5 h-5 fill-current" /></button>
                             <button className="text-white/20 hover:text-white transition-colors"><Repeat className="w-4 h-4" /></button>
                           </div>
-                          
+
                           {/* Center Info & Progress */}
                           <div className="flex-1 flex items-center gap-6 min-w-0">
                             <div className="w-12 h-12 rounded-lg bg-white/10 overflow-hidden border border-white/10 shadow-lg flex-shrink-0">
@@ -303,7 +306,7 @@ export default function App() {
                   )}
 
                   {activeUI === 'control' && (
-                    <motion.div 
+                    <motion.div
                       key="control-ui"
                       initial={{ scale: 0.9, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
@@ -312,7 +315,7 @@ export default function App() {
                     >
                       {/* Connectivity Tile */}
                       <div className="col-span-2 row-span-2 flex items-center justify-center">
-                        <GlassComponent 
+                        <GlassComponent
                           id="ctrl-conn" width={240} height={240} sceneUrl={SCENES[activeScene].url}
                           params={{ ...params, radius: 48, bezelWidth: 32 }}
                         >
@@ -327,7 +330,7 @@ export default function App() {
 
                       {/* Media Tile */}
                       <div className="col-span-2 row-span-2 flex items-center justify-center">
-                        <GlassComponent 
+                        <GlassComponent
                           id="ctrl-media" width={240} height={240} sceneUrl={SCENES[activeScene].url}
                           params={{ ...params, radius: 48, bezelWidth: 32 }}
                         >
@@ -353,44 +356,44 @@ export default function App() {
 
                       {/* Sliders - Capsule Shape */}
                       <div className="col-span-1 row-span-2 flex justify-center items-center">
-                        <GlassComponent 
+                        <GlassComponent
                           id="ctrl-brightness" width={100} height={240} sceneUrl={SCENES[activeScene].url}
                           params={{ ...params, radius: 50, bezelWidth: 32 }}
                         >
                           <div className="h-full w-full relative flex flex-col justify-end p-5">
-                             <div className="absolute inset-x-0 bottom-0 top-[30%] bg-white/10 rounded-full" />
-                             <div className="relative z-10 w-full flex justify-center pb-6"><Sun className="w-6 h-6 text-yellow-400" /></div>
+                            <div className="absolute inset-x-0 bottom-0 top-[30%] bg-white/10 rounded-full" />
+                            <div className="relative z-10 w-full flex justify-center pb-6"><Sun className="w-6 h-6 text-yellow-400" /></div>
                           </div>
                         </GlassComponent>
                       </div>
                       <div className="col-span-1 row-span-2 flex justify-center items-center">
-                        <GlassComponent 
+                        <GlassComponent
                           id="ctrl-volume" width={100} height={240} sceneUrl={SCENES[activeScene].url}
                           params={{ ...params, radius: 50, bezelWidth: 32 }}
                         >
                           <div className="h-full w-full relative flex flex-col justify-end p-5">
-                             <div className="absolute inset-x-0 bottom-0 top-[60%] bg-white/20 rounded-full" />
-                             <div className="relative z-10 w-full flex justify-center pb-6"><Volume2 className="w-6 h-6 text-white/80" /></div>
+                            <div className="absolute inset-x-0 bottom-0 top-[60%] bg-white/20 rounded-full" />
+                            <div className="relative z-10 w-full flex justify-center pb-6"><Volume2 className="w-6 h-6 text-white/80" /></div>
                           </div>
                         </GlassComponent>
                       </div>
 
                       {/* Small Action Icons */}
                       <div className="col-span-2 row-span-1 flex gap-5 h-full items-center justify-between">
-                         {[Bell, Moon, Droplets, Clock].map((Icon, idx) => (
-                           <GlassComponent 
-                             key={idx} id={`ctrl-btn-${idx}`} width={56} height={102} sceneUrl={SCENES[activeScene].url}
-                             params={{ ...params, radius: 28, bezelWidth: 20 }}
-                           >
-                              <div className="h-full w-full flex items-center justify-center"><Icon className="w-5 h-5 opacity-60 hover:opacity-100 transition-opacity" /></div>
-                           </GlassComponent>
-                         ))}
+                        {[Bell, Moon, Droplets, Clock].map((Icon, idx) => (
+                          <GlassComponent
+                            key={idx} id={`ctrl-btn-${idx}`} width={56} height={102} sceneUrl={SCENES[activeScene].url}
+                            params={{ ...params, radius: 28, bezelWidth: 20 }}
+                          >
+                            <div className="h-full w-full flex items-center justify-center"><Icon className="w-5 h-5 opacity-60 hover:opacity-100 transition-opacity" /></div>
+                          </GlassComponent>
+                        ))}
                       </div>
                     </motion.div>
                   )}
 
                   {activeUI === 'playground' && (
-                    <motion.div 
+                    <motion.div
                       key="playground-ui"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -398,19 +401,19 @@ export default function App() {
                       className="relative w-full h-[600px] flex items-center justify-center pointer-events-none"
                     >
                       <div className="absolute inset-0 flex items-center justify-center gap-12 overflow-visible">
-                        <motion.div 
-                          drag 
-                          dragMomentum={false} 
+                        <motion.div
+                          drag
+                          dragMomentum={false}
                           className="pointer-events-auto cursor-move active:cursor-grabbing"
                           onDrag={() => {
                             // Manual update trigger for refraction offset during CSS transform drag
-                            window.dispatchEvent(new Event('scroll')); 
+                            window.dispatchEvent(new Event('scroll'));
                           }}
                         >
-                          <GlassComponent 
-                            id="pg-dynamic" 
-                            width={params.pgWidth} 
-                            height={params.pgHeight} 
+                          <GlassComponent
+                            id="pg-dynamic"
+                            width={params.pgWidth}
+                            height={params.pgHeight}
                             sceneUrl={SCENES[activeScene].url}
                             params={{ ...params }}
                           >
@@ -422,18 +425,18 @@ export default function App() {
                           </GlassComponent>
                         </motion.div>
 
-                        <motion.div 
-                          drag 
-                          dragMomentum={false} 
+                        <motion.div
+                          drag
+                          dragMomentum={false}
                           className="pointer-events-auto cursor-move active:cursor-grabbing translate-y-20"
                           onDrag={() => {
                             window.dispatchEvent(new Event('scroll'));
                           }}
                         >
-                          <GlassComponent 
-                            id="pg-circle-dyn" 
-                            width={200} 
-                            height={200} 
+                          <GlassComponent
+                            id="pg-circle-dyn"
+                            width={200}
+                            height={200}
                             sceneUrl={SCENES[activeScene].url}
                             params={{ ...params, radius: 100 }}
                           >
@@ -446,14 +449,14 @@ export default function App() {
                   )}
 
                   {activeUI === 'search' && (
-                    <motion.div 
+                    <motion.div
                       key="search-ui"
                       initial={{ y: -30, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       exit={{ y: -30, opacity: 0 }}
                       transition={{ type: "spring", damping: 25, stiffness: 300 }}
                     >
-                      <GlassComponent 
+                      <GlassComponent
                         id="search-glass"
                         width={640}
                         height={64}
@@ -462,9 +465,9 @@ export default function App() {
                       >
                         <div className="flex items-center px-6 h-full gap-5">
                           <Search className="w-6 h-6 text-white/30" />
-                          <input 
-                            type="text" 
-                            placeholder="搜索应用、文件或更多内容..." 
+                          <input
+                            type="text"
+                            placeholder="搜索应用、文件或更多内容..."
                             className="bg-transparent border-none outline-none text-xl w-full placeholder:text-white/20 font-semibold tracking-tight"
                             autoFocus
                           />
@@ -478,14 +481,14 @@ export default function App() {
                   )}
 
                   {activeUI === 'notification' && (
-                    <motion.div 
+                    <motion.div
                       key="notification-ui"
                       initial={{ x: 60, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: 60, opacity: 0 }}
                       transition={{ type: "spring", damping: 25, stiffness: 300 }}
                     >
-                      <GlassComponent 
+                      <GlassComponent
                         id="notif-glass"
                         width={340}
                         height={140}
@@ -522,7 +525,7 @@ export default function App() {
       {/* Controls Panel */}
       <AnimatePresence>
         {isControlsOpen && (
-          <motion.div 
+          <motion.div
             initial={{ x: 360 }}
             animate={{ x: 0 }}
             exit={{ x: 360 }}
@@ -586,11 +589,11 @@ export function GlassComponent({ id, width, height, maxWidth, params, sceneUrl, 
         // Use integral values to prevent subpixel rendering artifacts in SVG
         const w = Math.round(rect.width);
         const h = Math.round(rect.height);
-        
+
         if (w !== dimensions.w || h !== dimensions.h) {
           setDimensions({ w, h });
         }
-        
+
         setOffset({
           x: -rect.left,
           y: -rect.top
@@ -602,11 +605,11 @@ export function GlassComponent({ id, width, height, maxWidth, params, sceneUrl, 
     const observer = new ResizeObserver(() => {
       requestAnimationFrame(update);
     });
-    
+
     if (containerRef.current) observer.observe(containerRef.current);
     window.addEventListener('resize', update);
     window.addEventListener('scroll', update);
-    
+
     return () => {
       observer.disconnect();
       window.removeEventListener('resize', update);
@@ -615,18 +618,18 @@ export function GlassComponent({ id, width, height, maxWidth, params, sceneUrl, 
   }, [dimensions.w, dimensions.h]);
 
   return (
-    <div 
-      ref={containerRef} 
-      className="relative group inline-block" 
-      style={{ 
-        width: width || 'auto', 
+    <div
+      ref={containerRef}
+      className="relative group inline-block"
+      style={{
+        width: width || 'auto',
         height: height || 'auto',
         maxWidth: maxWidth || 'none'
       }}
     >
       {/* 1. Filter Definition */}
       {dimensions.w > 0 && dimensions.h > 0 && (
-        <GlassFilter 
+        <GlassFilter
           id={id}
           width={dimensions.w}
           height={dimensions.h}
@@ -635,29 +638,29 @@ export function GlassComponent({ id, width, height, maxWidth, params, sceneUrl, 
       )}
 
       {/* 2. Refraction Layer (Background) */}
-      <div 
+      <div
         className="absolute inset-0 overflow-hidden pointer-events-none z-0"
-        style={{ 
+        style={{
           borderRadius: params.radius,
           filter: dimensions.w > 0 ? `url(#${id})` : 'none',
           willChange: 'filter'
         }}
       >
-        <img 
-          src={sceneUrl} 
-          className="absolute w-[100vw] h-[100vh] object-cover opacity-100 max-w-none" 
-          style={{ 
+        <img
+          src={sceneUrl}
+          className="absolute w-[100vw] h-[100vh] object-cover opacity-100 max-w-none"
+          style={{
             transform: `translate3d(${offset.x}px, ${offset.y}px, 0)`,
             pointerEvents: 'none'
           }}
-          referrerPolicy="no-referrer" 
+          referrerPolicy="no-referrer"
         />
       </div>
 
       {/* 3. Sharp UI Layer (This defines the size if width/height is auto) */}
-      <div 
+      <div
         className="relative z-10 overflow-hidden"
-        style={{ 
+        style={{
           borderRadius: params.radius,
           height: !height || height === 'auto' ? undefined : height,
           minHeight: !height || height === 'auto' ? undefined : height,
@@ -670,8 +673,8 @@ export function GlassComponent({ id, width, height, maxWidth, params, sceneUrl, 
       </div>
 
       {/* 4. Subtle Outer Glow */}
-      <div 
-        className="absolute inset-0 -z-10 blur-3xl opacity-20 bg-black/40 translate-y-4 pointer-events-none" 
+      <div
+        className="absolute inset-0 -z-10 blur-3xl opacity-20 bg-black/40 translate-y-4 pointer-events-none"
         style={{ borderRadius: params.radius }}
       />
     </div>
@@ -688,12 +691,12 @@ function ControlSlider({ label, value, min, max, step = 1, onChange, icon }: any
         </div>
         <span className="text-[10px] font-mono text-white/50 bg-white/5 px-2.5 py-1 rounded-md border border-white/5">{value}</span>
       </div>
-      <input 
-        type="range" 
-        min={min} 
-        max={max} 
-        step={step} 
-        value={value} 
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
         className="w-full h-1 bg-white/5 rounded-lg appearance-none cursor-pointer accent-white hover:accent-blue-400 transition-all"
       />

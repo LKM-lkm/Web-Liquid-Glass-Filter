@@ -1,114 +1,104 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, ChevronRight, Github, Zap, ShieldCheck, Cpu } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { GlassComponent } from '../App';
 
 interface HomeUIProps {
   onStart?: () => void;
-  activeScene?: string;
   sceneUrl?: string;
 }
 
 export function HomeUI({ onStart, sceneUrl }: HomeUIProps) {
-  const features = [
-    { icon: <Zap className="w-5 h-5 text-blue-400" />, title: "极致渲染", desc: "60FPS 硬件加速 SVG 滤镜管线", glassId: "f-render" },
-    { icon: <ShieldCheck className="w-5 h-5 text-green-400" />, title: "物理精确", desc: "基于 Snell 定理的实时折射算法", glassId: "f-physics" },
-    { icon: <Cpu className="w-5 h-5 text-purple-400" />, title: "多维参数", desc: "支持厚度、折射率、倒角实时调节", glassId: "f-params" }
+  const metrics = [
+    { label: "RENDERING", value: "60FPS", desc: "Hardware Accelerated Pipeline", glassId: "m-render" },
+    { label: "INDEX OF REFRACTION", value: "n=1.52", desc: "Physically Accurate Optics", glassId: "m-physics" },
+    { label: "GHOSTING", value: "Zero", desc: "Pixel-perfect Alignment", glassId: "m-sync" }
   ];
 
   return (
-    <div className="w-full flex flex-col items-center justify-center py-24 px-10 text-center gap-16 max-w-7xl mx-auto">
-      {/* Hero Section */}
-      <div className="space-y-16">
-        <motion.div 
+    <div className="w-full flex flex-col items-center justify-center py-20 px-10 text-center max-w-[1400px] mx-auto min-h-full">
+      <div className="space-y-16 mt-10">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-4 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-3xl"
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="inline-flex items-center gap-4 px-5 py-2 rounded-full border border-white/5 bg-white/[0.02]"
         >
-          <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
-          <span className="text-[12px] font-black uppercase tracking-[0.4em] text-white/50">Next-Gen Spatial UI Engine</span>
+          <div className="w-1.5 h-1.5 rounded-full bg-white/60 animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.4)]" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">v1.2.5 Spatial Interface</span>
         </motion.div>
-        
+
         <div className="relative">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10"
           >
-            <h1 className="text-[140px] font-black tracking-[-0.06em] leading-[0.8] mb-12 mix-blend-plus-lighter">
-              LIQUID <br />
-              <span className="text-white/15 decoration-white/5 underline underline-offset-10">REFRACTION</span>
+            <h1 className="text-[160px] font-black tracking-[-0.05em] leading-[0.8] mb-12 text-transparent bg-clip-text bg-gradient-to-b from-white via-white/90 to-white/30 selection:bg-transparent">
+              Glass.<br />
+              Refined.
             </h1>
-            <p className="text-2xl text-white/40 font-medium max-w-3xl mx-auto leading-relaxed mt-10">
-              打破 Web 开发的次元壁。基于真实物理光学的液态玻璃渲染系统，为你的应用注入光影与厚度之魂。
+            <p className="text-xl text-white/30 font-medium max-w-2xl mx-auto leading-relaxed mt-10 tracking-wide">
+              The physics-based refraction engine for web. <br /> Precision optics, zero artifacts.
             </p>
           </motion.div>
-          
-          {/* Large Floating Glass Decorative Element */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 opacity-60">
-             <GlassComponent 
-               id="hero-glass-blob" width={800} height={400} sceneUrl={sceneUrl}
-               params={{ blur: 15, glassThickness: 120, radius: 200, refractiveIndex: 1.2, specularOpacity: 0.2 }}
-             >
-                <div className="w-full h-full" />
-             </GlassComponent>
-          </div>
+
         </div>
       </div>
-      
-      {/* Feature Section - Using Liquid Glass Cards */}
-      <motion.div 
+
+      <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, delay: 0.4 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-10 w-full"
+        transition={{ duration: 1.4, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl mt-24"
       >
-        {features.map((f) => (
-          <GlassComponent 
-            key={f.glassId} id={f.glassId} width="100%" height={260} sceneUrl={sceneUrl}
-            params={{ radius: 48, blur: 5, glassThickness: 60, bezelWidth: 32 }}
+        {metrics.map((m) => (
+          <GlassComponent
+            key={m.glassId} id={m.glassId} width="100%" height={220} sceneUrl={sceneUrl}
+            params={{ radius: 32, blur: 2, glassThickness: 60, bezelWidth: 25, refractionSaturation: 1.6 }}
           >
-            <div className="p-10 text-left h-full flex flex-col justify-between group cursor-help">
-              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:bg-white/10 transition-all duration-500 tracking-widest">{f.icon}</div>
+            <div className="p-8 text-left h-full flex flex-col justify-between cursor-default">
+              <div className="text-[10px] text-white/30 uppercase tracking-[0.3em] font-bold">{m.label}</div>
               <div>
-                <h3 className="text-xl font-bold mb-3 tracking-tight">{f.title}</h3>
-                <p className="text-[15px] text-white/40 font-medium leading-relaxed">{f.desc}</p>
+                <h3 className="text-4xl font-black mb-2 tracking-tighter text-white/90">{m.value}</h3>
+                <p className="text-[13px] text-white/30 font-medium tracking-wide">{m.desc}</p>
               </div>
             </div>
           </GlassComponent>
         ))}
       </motion.div>
 
-      {/* Button Action Block */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.8 }}
-        className="flex flex-col gap-12 mt-12 items-center"
+      {/* Professional Footer Bar */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="mt-20 w-full max-w-5xl border-t border-white/10 pt-10 flex flex-col md:flex-row items-center justify-between gap-10"
       >
-        <GlassComponent 
-          id="cta-button-glass" width={320} height={84} sceneUrl={sceneUrl}
-          params={{ radius: 42, blur: 2, glassThickness: 20, bezelWidth: 15 }}
-        >
-          <button 
-            onClick={onStart}
-            className="w-full h-full flex items-center justify-center gap-4 text-white font-black text-xl bg-white/5 hover:bg-white/10 transition-all group"
-          >
-            进入实验舞台 <ChevronRight className="w-6 h-6 stroke-[3] group-hover:translate-x-1 transition-transform" />
-          </button>
-        </GlassComponent>
-        
-        <div className="flex items-center gap-16">
-          <div className="flex items-center gap-4 text-white/20 hover:text-white transition-colors cursor-pointer group">
-            <Github className="w-6 h-6 opacity-30 group-hover:opacity-100" />
-            <span className="text-sm font-bold uppercase tracking-[0.3em]">Documentation</span>
+        <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
+          <div className="flex flex-col gap-1.5 text-left">
+            <span className="text-[10px] text-white/30 uppercase tracking-[0.3em] font-bold">Architecture</span>
+            <span className="text-sm font-mono text-white/80">React + SVG Filter</span>
           </div>
-          <div className="w-1.5 h-1.5 rounded-full bg-white/5" />
-          <div className="flex items-center gap-4 text-white/20 hover:text-white transition-colors cursor-pointer group">
-            <span className="text-sm font-bold uppercase tracking-[0.3em]">Vite / React READY</span>
+          <div className="flex flex-col gap-1.5 text-left">
+            <span className="text-[10px] text-white/30 uppercase tracking-[0.3em] font-bold">Release</span>
+            <span className="text-sm font-mono text-white/80">v1.2.5 LTS</span>
+          </div>
+          <div className="flex flex-col gap-1.5 text-left">
+            <span className="text-[10px] text-white/30 uppercase tracking-[0.3em] font-bold">License</span>
+            <span className="text-sm font-mono text-white/80">MIT Open Source</span>
           </div>
         </div>
+
+        <button
+          onClick={onStart}
+          className="group relative px-8 py-4 rounded-xl overflow-hidden bg-white text-black hover:bg-white/90 transition-all shadow-[0_0_40px_-10px_rgba(255,255,255,0.4)] flex items-center gap-3 font-bold text-[13px] uppercase tracking-[0.15em] active:scale-95"
+        >
+          <div className="w-2 h-2 rounded-full bg-blue-500 animate-[pulse_2s_ease-in-out_infinite]" />
+          Launch Workspace
+          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform stroke-[3]" />
+        </button>
       </motion.div>
     </div>
   );
