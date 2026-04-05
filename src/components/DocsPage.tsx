@@ -19,17 +19,7 @@ export function DocsPage() {
   return (
     <div className="fixed inset-0 z-[2000] min-h-screen w-full bg-[#050505] text-white overflow-y-auto font-sans">
       {/* Minimalist Tech Background Ambient */}
-      <div className="fixed inset-0 pointer-events-none z-0 flex justify-center bg-[#050505]">
-        <div 
-          className="absolute inset-0 opacity-10"
-          style={{ 
-            backgroundImage: `linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,1) 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
-            maskImage: 'radial-gradient(circle at center, white 10%, transparent 80%)',
-            WebkitMaskImage: 'radial-gradient(circle at center, white 10%, transparent 80%)'
-          }}
-        />
-      </div>
+      <div className="fixed inset-0 pointer-events-none z-0 flex justify-center bg-[#050505]" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row">
         

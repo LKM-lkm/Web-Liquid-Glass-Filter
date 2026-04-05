@@ -76,7 +76,8 @@ export default function App() {
     radius: 32,                   // 外倒角 CSS 控制半径
     magnifyingScale: 0,           // 微距放大偏差（实验室专用）
     pgWidth: 300,                 // 调试用宽度
-    pgHeight: 200                 // 调试用高度
+    pgHeight: 200,                // 调试用高度
+    pgCircleSize: 200             // 测试圆球尺寸
   });
 
 
@@ -110,13 +111,13 @@ export default function App() {
           />
         </div>
       ) : (
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           <motion.div
-            key={activeScene}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            key={SCENES[activeScene].url}
+            initial={{ filter: 'blur(10px)', opacity: 0.1, scale: 1.02 }}
+            animate={{ filter: 'blur(0px)', opacity: 1, scale: 1 }}
+            exit={{ filter: 'blur(20px)', opacity: 0, scale: 1.05 }}
+            transition={{ duration: 1.0, ease: "easeInOut" }}
             className="absolute inset-0 z-0"
           >
             <img
@@ -448,12 +449,34 @@ export default function App() {
                         >
                           <GlassComponent
                             id="pg-circle-dyn"
-                            width={200}
-                            height={200}
+                            width={params.pgCircleSize}
+                            height={params.pgCircleSize}
                             sceneUrl={SCENES[activeScene].url}
-                            params={{ ...params, radius: 100 }}
+                            params={{ ...params, radius: params.pgCircleSize / 2 }}
                           >
-                            <div className="h-full flex items-center justify-center text-white/20 font-bold uppercase tracking-widest text-[9px]">物理球体</div>
+                            <div className="h-full flex items-center justify-center text-white/40 font-bold uppercase tracking-widest text-[9px] drop-shadow-md">物理球体</div>
+                          </GlassComponent>
+                        </motion.div>
+
+                        {/* 新增的胶囊形式组件 */}
+                        <motion.div
+                          drag
+                          dragMomentum={false}
+                          className="pointer-events-auto cursor-move active:cursor-grabbing translate-x-32 -translate-y-32"
+                          onDrag={() => {
+                            window.dispatchEvent(new Event('scroll'));
+                          }}
+                        >
+                          <GlassComponent
+                            id="pg-capsule-dyn"
+                            width={220}
+                            height={60}
+                            sceneUrl={SCENES[activeScene].url}
+                            params={{ ...params, radius: 30 }}
+                          >
+                            <div className="h-full flex items-center justify-center text-white/50 font-bold uppercase tracking-[0.2em] text-[10px] gap-2">
+                              交互胶囊按钮
+                            </div>
                           </GlassComponent>
                         </motion.div>
                       </div>
@@ -568,6 +591,7 @@ export default function App() {
                     <div className="h-px bg-white/10 my-2" />
                     <ControlSlider label="组件宽度" icon={<Maximize2 className="w-3.5 h-3.5" />} value={params.pgWidth} min={100} max={800} onChange={(v: number) => handleParamChange('pgWidth', v)} />
                     <ControlSlider label="组件高度" icon={<Maximize2 className="w-3.5 h-3.5" />} value={params.pgHeight} min={100} max={600} onChange={(v: number) => handleParamChange('pgHeight', v)} />
+                    <ControlSlider label="圆球尺寸" icon={<Droplets className="w-3.5 h-3.5" />} value={params.pgCircleSize} min={50} max={400} onChange={(v: number) => handleParamChange('pgCircleSize', v)} />
                   </>
                 )}
               </div>
