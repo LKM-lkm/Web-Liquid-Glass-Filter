@@ -5,10 +5,11 @@ import { GlassComponent } from '../App';
 
 interface HomeUIProps {
   onStart?: () => void;
+  onOpenDocs?: () => void;
   sceneUrl?: string;
 }
 
-export function HomeUI({ onStart, sceneUrl }: HomeUIProps) {
+export function HomeUI({ onStart, onOpenDocs, sceneUrl }: HomeUIProps) {
   const metrics = [
     { label: "RENDERING", value: "60FPS", desc: "Hardware Accelerated Pipeline", glassId: "m-render" },
     { label: "INDEX OF REFRACTION", value: "n=1.52", desc: "Physically Accurate Optics", glassId: "m-physics" },
@@ -70,11 +71,11 @@ export function HomeUI({ onStart, sceneUrl }: HomeUIProps) {
       </motion.div>
 
       {/* Professional Footer Bar */}
-      <motion.div
+      <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="mt-20 w-full max-w-5xl border-t border-white/10 pt-10 flex flex-col md:flex-row items-center justify-between gap-10"
+        className="mt-20 w-full max-w-5xl pt-10 flex flex-col md:flex-row items-center justify-between gap-10"
       >
         <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
           <div className="flex flex-col gap-1.5 text-left">
@@ -91,14 +92,25 @@ export function HomeUI({ onStart, sceneUrl }: HomeUIProps) {
           </div>
         </div>
 
-        <button
-          onClick={onStart}
-          className="group relative px-8 py-4 rounded-xl overflow-hidden bg-white text-black hover:bg-white/90 transition-all shadow-[0_0_40px_-10px_rgba(255,255,255,0.4)] flex items-center gap-3 font-bold text-[13px] uppercase tracking-[0.15em] active:scale-95"
-        >
-          <div className="w-2 h-2 rounded-full bg-blue-500 animate-[pulse_2s_ease-in-out_infinite]" />
-          Launch Workspace
-          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform stroke-[3]" />
-        </button>
+        <div className="flex items-center gap-6">
+          <button 
+            onClick={onStart}
+            className="group relative px-8 py-4 rounded-xl overflow-hidden bg-white text-black hover:bg-white/90 transition-all shadow-[0_0_40px_-10px_rgba(255,255,255,0.4)] flex items-center gap-3 font-bold text-[13px] uppercase tracking-[0.15em] active:scale-95"
+          >
+            <div className="w-2 h-2 rounded-full bg-blue-500 animate-[pulse_2s_ease-in-out_infinite]" />
+            Launch Workspace
+            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform stroke-[3]" />
+          </button>
+
+          <div className="flex gap-3">
+            <button 
+              onClick={onOpenDocs}
+              className="px-8 py-4 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/40 transition-colors flex items-center justify-center font-bold text-[12px] uppercase tracking-[0.2em] text-white/80 hover:text-white"
+            >
+              阅读项目文档
+            </button>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

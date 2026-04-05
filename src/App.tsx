@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import ReactMarkdown from 'react-markdown';
+import { X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import {
   Search,
   Play,
@@ -57,6 +60,7 @@ const UI_SCENARIOS = [
 export default function App() {
   const [activeScene, setActiveScene] = useState(0);
   const [isDemoStarted, setIsDemoStarted] = useState(false);
+  const navigate = useNavigate();
   const [activeUI, setActiveUI] = useState('player');
   const [params, setParams] = useState({
     glassThickness: 60,
@@ -87,21 +91,20 @@ export default function App() {
     <div className="min-h-screen bg-[#050505] text-white selection:bg-white/20 overflow-hidden flex flex-col font-sans antialiased">
       {/* Background Layer: Dark premium gradient for landing, scene photo for demo */}
       {!isDemoStarted ? (
-        // Premium dark background for landing page
-        <div className="absolute inset-0 z-0 bg-[#020202]">
-          {/* Subtle Ambient Lighting */}
-          <div className="absolute top-[-20%] left-[10%] w-[70vw] h-[70vw] rounded-full bg-blue-900/10 blur-[120px] mix-blend-screen" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-indigo-900/10 blur-[120px] mix-blend-screen" />
+        <div className="fixed inset-0 z-0 pointer-events-none bg-[#0a0a0b]">
+          {/* Subtle Abstract Highlights */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[400px] bg-white/[0.02] blur-[100px] rounded-full pointer-events-none" />
 
-          {/* Prominent High-Tech Matrix Grid */}
+          {/* Crisp, Correct Matrix Grid */}
           <div
-            className="absolute inset-0 opacity-30 [mask-image:radial-gradient(circle_at_center,white,transparent_80%)]"
+            className="absolute inset-0 opacity-20 pointer-events-none"
             style={{
-              backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)`,
-              backgroundSize: '40px 40px'
+              backgroundImage: `linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,1) 1px, transparent 1px)`,
+              backgroundSize: '40px 40px',
+              maskImage: 'radial-gradient(circle at center, white 0%, transparent 70%)',
+              WebkitMaskImage: 'radial-gradient(circle at center, white 0%, transparent 70%)'
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020202]/50 to-[#020202]" />
         </div>
       ) : (
         <AnimatePresence mode="wait">
@@ -125,7 +128,7 @@ export default function App() {
       )}
 
       {/* Top Navigation Bar */}
-      <header className="relative z-[100] px-12 py-10 flex justify-between items-center">
+      <header className="relative z-50 w-full px-8 py-6 flex justify-between items-center bg-transparent">
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setIsDemoStarted(false)}>
             <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-3xl border border-white/10 shadow-2xl group-hover:bg-white/20 transition-all">
@@ -141,10 +144,10 @@ export default function App() {
               height={44}
               params={{
                 blur: 2,
-                glassThickness: 10,
-                bezelWidth: 12,
+                glassThickness: 60,
+                bezelWidth: 25,
                 refractiveIndex: 1.1,
-                specularOpacity: 0.1,
+                refractionSaturation: 1.6,
                 radius: 22
               }}
               sceneUrl={SCENES[activeScene].url}
@@ -202,6 +205,7 @@ export default function App() {
             >
               <HomeUI
                 onStart={() => setIsDemoStarted(true)}
+                onOpenDocs={() => navigate('/docs')}
                 sceneUrl={SCENES[activeScene].url}
               />
             </motion.div>
@@ -560,16 +564,20 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <footer className="relative z-50 px-12 py-10 flex justify-between items-center text-[10px] text-white/20 uppercase tracking-[0.5em] font-bold">
-        <div className="flex gap-16">
-          <span>© 2026 LiquidGlass 实验室</span>
-          <span>Apple 设计理念</span>
+      <footer className="relative w-full border-t border-white/5 bg-[#0a0a0b]/80 backdrop-blur-3xl px-12 py-8 flex flex-col md:flex-row justify-between items-center text-[12px] font-medium text-white/40 mt-auto z-[60]">
+        <div className="flex items-center gap-3">
+          <div className="w-1.5 h-1.5 rounded-full bg-white/60" />
+          <span className="tracking-[0.1em] uppercase text-white/60">LiquidGlass Engine ™</span>
         </div>
-        <div className="flex gap-10">
-          <span>SVG 折射引擎 v1.2</span>
-          <span>Public Sans 字体</span>
+        <div className="flex gap-8 mt-4 md:mt-0 uppercase tracking-widest text-[10px]">
+          <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
+          <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
+          <span className="hover:text-white transition-colors cursor-pointer flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-white/30" /> System Status
+          </span>
         </div>
       </footer>
+
     </div>
   );
 }
