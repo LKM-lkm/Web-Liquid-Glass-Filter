@@ -1,0 +1,5 @@
+{
+  "name": "Liquid Glass Filter Demo",
+  "description": "A sophisticated interactive demo of liquid glass refraction effects using SVG filters and custom displacement maps.",
+  "requestFramePermissions": []
+}
