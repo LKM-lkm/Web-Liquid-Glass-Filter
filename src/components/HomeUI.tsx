@@ -7,9 +7,10 @@ interface HomeUIProps {
   onStart?: () => void;
   onOpenDocs?: () => void;
   sceneUrl?: string;
+  globalParams?: any;
 }
 
-export function HomeUI({ onStart, onOpenDocs, sceneUrl }: HomeUIProps) {
+export function HomeUI({ onStart, onOpenDocs, sceneUrl, globalParams }: HomeUIProps) {
   const metrics = [
     { label: "RENDERING", value: "60FPS", desc: "Hardware Accelerated Pipeline", glassId: "m-render" },
     { label: "INDEX OF REFRACTION", value: "n=1.52", desc: "Physically Accurate Optics", glassId: "m-physics" },
@@ -57,7 +58,7 @@ export function HomeUI({ onStart, onOpenDocs, sceneUrl }: HomeUIProps) {
         {metrics.map((m) => (
           <GlassComponent
             key={m.glassId} id={m.glassId} width="100%" height={220} sceneUrl={sceneUrl}
-            params={{ radius: 32, blur: 2, glassThickness: 60, bezelWidth: 25, refractionSaturation: 1.6 }}
+            params={globalParams || { radius: 32, blur: 2, glassThickness: 60, bezelWidth: 25, refractionSaturation: 1.6 }}
           >
             <div className="p-8 text-left h-full flex flex-col justify-between cursor-default">
               <div className="text-[10px] text-white/30 uppercase tracking-[0.3em] font-bold">{m.label}</div>

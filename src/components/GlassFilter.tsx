@@ -52,9 +52,10 @@ export const GlassFilter: React.FC<GlassFilterProps> = ({
   const b = useMemo(() => De(P), [P]);
 
   // 2. Calculate specular layer
-  // User logic uses bezelWidth (or a fix value 50) for the s parameter
-  const T = useMemo(() => xu(width, height, radius, bezelWidth, 1.047, dpr, specularHardness),
-    [width, height, radius, bezelWidth, dpr, specularHardness]);
+  // Invert the hardness slider so larger == harder (while maintaining the default 2 intersection at 2)
+  const mappedHardness = 4 / Math.max(0.1, specularHardness);
+  const T = useMemo(() => xu(width, height, radius, bezelWidth, 1.047, dpr, mappedHardness),
+    [width, height, radius, bezelWidth, dpr, mappedHardness]);
 
   const M = useMemo(() => De(T), [T]);
 
@@ -136,19 +137,11 @@ export const GlassFilter: React.FC<GlassFilterProps> = ({
 
           <feImage href={M} result="specular_layer" x="0" y="0" width={width} height={height} preserveAspectRatio="none" />
 
-          <feComposite
-            in="displaced_saturated"
-            in2="specular_layer"
-            operator="in"
-            result="specular_saturated"
-          />
-
           <feComponentTransfer in="specular_layer" result="specular_faded">
             <feFuncA type="linear" slope={specularOpacity} />
           </feComponentTransfer>
 
-          <feBlend in="specular_saturated" in2="displaced" mode="normal" result="withSaturation" />
-          <feBlend in="specular_faded" in2="withSaturation" mode="normal" result="final_output" />
+          <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" result="final_output" />
           <feComposite in="final_output" in2="SourceAlpha" operator="in" />
         </filter>
       </defs>

@@ -62,20 +62,23 @@ export default function App() {
   const [isDemoStarted, setIsDemoStarted] = useState(false);
   const navigate = useNavigate();
   const [activeUI, setActiveUI] = useState('player');
+  // 核心光学参数状态管理：您可以在此调整默认初始化的物理数值
+  // 任何后续修改都会单向同步渲染向 GlassComponent 模型
   const [params, setParams] = useState({
-    glassThickness: 60,
-    bezelWidth: 25,
-    refractiveIndex: 1.2,
-    blur: 8,
-    specularOpacity: 0.4,
-    specularHardness: 2,
-    refractionSaturation: 1.2,
-    scaleRatio: 1,
-    radius: 32,
-    magnifyingScale: 0,
-    pgWidth: 300,
-    pgHeight: 200
+    glassThickness: 60,           // 空间厚度，控制光线衰减阈值
+    bezelWidth: 25,               // 倒角宽/曲率平滑半径 (上限 30 以避免反向扭曲)
+    refractiveIndex: 1.52,        // 物理精确折射率 (n值，参考真实玻璃)
+    blur: 4,                      // 底层散景/弥散光高斯模糊强度
+    specularOpacity: 0.4,         // 高光层不透明度（明暗强度）
+    specularHardness: 2,          // 高光硬度边界（数值越大越锐利锋利）
+    refractionSaturation: 1.2,    // 穿透镜片的色彩折射饱和度增强
+    scaleRatio: 1,                // 放大形变倍率参数
+    radius: 32,                   // 外倒角 CSS 控制半径
+    magnifyingScale: 0,           // 微距放大偏差（实验室专用）
+    pgWidth: 300,                 // 调试用宽度
+    pgHeight: 200                 // 调试用高度
   });
+
 
   const [isControlsOpen, setIsControlsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -137,31 +140,36 @@ export default function App() {
             <span className="text-xl font-bold tracking-tight">LiquidGlass</span>
           </div>
 
+          {/* === 顶部导航状态栏与选项卡切换 (Nav Pill) === */}
+          {/* 当点击进入空间后显示 */}
           {isDemoStarted && (
             <GlassComponent
               id="nav-pill"
               width="auto"
               height={44}
               params={{
-                blur: 2,
+                blur: 1,
                 glassThickness: 60,
-                bezelWidth: 25,
-                refractiveIndex: 1.1,
-                refractionSaturation: 1.6,
+                bezelWidth: 20,
+                refractiveIndex: 1.2,
+                refractionSaturation: 1.8,
+                scaleRatio: 1.5,
                 radius: 22
               }}
               sceneUrl={SCENES[activeScene].url}
             >
+              {/* 这里是选项卡的实际滑动渲染与交互区域 */}
+              {/* 修改这里可以定制选项卡的宽度、排版和 hover 材质 */}
               <nav className="flex items-center px-1 py-1 h-full">
                 {UI_SCENARIOS.map((ui) => (
                   <button
                     key={ui.id}
                     onClick={() => setActiveUI(ui.id)}
-                    className={`flex items-center gap-2 px-6 h-full rounded-full text-[13px] font-bold transition-all duration-300 ${activeUI === ui.id ? 'bg-white text-black shadow-xl scale-100' : 'text-white hover:bg-white/10'
+                    className={`flex items-center gap-2 px-6 h-full rounded-full text-[13px] font-bold transition-all duration-300 ${activeUI === ui.id ? 'bg-white/50 text-white scale-100' : 'text-white/80 hover:text-white hover:bg-white/20'
                       }`}
                   >
-                    <span className={activeUI === ui.id ? 'text-black' : 'text-white'}>{ui.icon}</span>
-                    <span className={activeUI === ui.id ? 'text-black' : 'text-white'}>{ui.name}</span>
+                    <span className={activeUI === ui.id ? 'text-white' : 'text-white/60'}>{ui.icon}</span>
+                    <span className={activeUI === ui.id ? 'text-white' : 'text-white/60'}>{ui.name}</span>
                   </button>
                 ))}
               </nav>
@@ -207,6 +215,7 @@ export default function App() {
                 onStart={() => setIsDemoStarted(true)}
                 onOpenDocs={() => navigate('/docs')}
                 sceneUrl={SCENES[activeScene].url}
+                globalParams={params}
               />
             </motion.div>
           ) : (
@@ -468,14 +477,14 @@ export default function App() {
                         sceneUrl={SCENES[activeScene].url}
                       >
                         <div className="flex items-center px-6 h-full gap-5">
-                          <Search className="w-6 h-6 text-white/30" />
+                          <Search className="w-6 h-6 text-white/60" />
                           <input
                             type="text"
                             placeholder="搜索应用、文件或更多内容..."
-                            className="bg-transparent border-none outline-none text-xl w-full placeholder:text-white/20 font-semibold tracking-tight"
+                            className="bg-transparent border-none outline-none text-xl w-full placeholder:text-white/40 font-semibold tracking-tight"
                             autoFocus
                           />
-                          <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/10 text-[11px] font-bold text-white/40 border border-white/10 shadow-sm">
+                          <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/20 text-[11px] font-bold text-white/80 border border-white/20 shadow-sm">
                             <Command className="w-3 h-3" />
                             <span>K</span>
                           </div>
@@ -534,26 +543,29 @@ export default function App() {
             animate={{ x: 0 }}
             exit={{ x: 360 }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="absolute right-10 top-1/2 -translate-y-1/2 z-[200]"
+            className="absolute right-6 top-1/2 -translate-y-1/2 z-[200]"
           >
-            <div className="w-[320px] bg-black/40 backdrop-blur-3xl rounded-[48px] border border-white/10 p-10 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)]">
-              <div className="flex items-center justify-between mb-10">
-                <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/30">光学引擎参数</span>
-                <button onClick={() => setIsControlsOpen(false)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors">
-                  <ChevronRight className="w-4 h-4 text-white/40" />
+            <div className="w-[300px] bg-[#0a0a0b]/80 backdrop-blur-3xl rounded-[32px] border border-white/10 p-6 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto custom-scrollbar">
+              <div className="flex items-center justify-between mb-6 sticky top-0 bg-[#0a0a0b]/90 backdrop-blur-3xl pb-2 z-10">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">光学引擎参数控制</span>
+                <button onClick={() => setIsControlsOpen(false)} className="w-6 h-6 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors">
+                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
                 </button>
               </div>
 
-              <div className="space-y-9">
-                <ControlSlider label="厚度 (Thickness)" icon={<Layers className="w-3.5 h-3.5" />} value={params.glassThickness} min={1} max={150} onChange={(v: number) => handleParamChange('glassThickness', v)} />
-                <ControlSlider label="倒角 (Bezel)" icon={<Maximize2 className="w-3.5 h-3.5" />} value={params.bezelWidth} min={1} max={100} onChange={(v: number) => handleParamChange('bezelWidth', v)} />
-                <ControlSlider label="折射率 (Refraction)" icon={<Droplets className="w-3.5 h-3.5" />} value={params.refractiveIndex} min={1} max={3} step={0.1} onChange={(v: number) => handleParamChange('refractiveIndex', v)} />
-                <ControlSlider label="模糊 (Blur)" icon={<Sun className="w-3.5 h-3.5" />} value={params.blur} min={0} max={40} onChange={(v: number) => handleParamChange('blur', v)} />
-                <ControlSlider label="高光硬度" icon={<Sparkles className="w-3.5 h-3.5" />} value={params.specularHardness} min={0.5} max={10} step={0.1} onChange={(v: number) => handleParamChange('specularHardness', v)} />
-                <ControlSlider label="折射饱和度" icon={<Droplets className="w-3.5 h-3.5" />} value={params.refractionSaturation} min={0} max={5} step={0.1} onChange={(v: number) => handleParamChange('refractionSaturation', v)} />
+              <div className="space-y-4">
+                <ControlSlider label="厚度 (Thickness)" icon={<Layers className="w-3.5 h-3.5 opacity-50" />} value={params.glassThickness} min={1} max={150} onChange={(v: number) => handleParamChange('glassThickness', v)} />
+                <ControlSlider label="倒角参数 (Bezel Width)" icon={<Maximize2 className="w-3.5 h-3.5 opacity-50" />} value={params.bezelWidth} min={1} max={30} onChange={(v: number) => handleParamChange('bezelWidth', v)} />
+                <ControlSlider label="边缘曲率 (Radius)" icon={<Sun className="w-3.5 h-3.5 opacity-50" />} value={params.radius} min={0} max={80} onChange={(v: number) => handleParamChange('radius', v)} />
+                <ControlSlider label="折射率 (Refraction)" icon={<Droplets className="w-3.5 h-3.5 opacity-50" />} value={params.refractiveIndex} min={1} max={3} step={0.1} onChange={(v: number) => handleParamChange('refractiveIndex', v)} />
+                <ControlSlider label="折射比 (Scale)" icon={<Maximize2 className="w-3.5 h-3.5 opacity-50" />} value={params.scaleRatio} min={0.1} max={3} step={0.1} onChange={(v: number) => handleParamChange('scaleRatio', v)} />
+                <ControlSlider label="引擎弥散 (Blur)" icon={<Sun className="w-3.5 h-3.5 opacity-50" />} value={params.blur} min={0} max={40} onChange={(v: number) => handleParamChange('blur', v)} />
+                <ControlSlider label="高光硬度 (Hardness)" icon={<Sparkles className="w-3.5 h-3.5 opacity-50" />} value={params.specularHardness} min={0.5} max={10} step={0.1} onChange={(v: number) => handleParamChange('specularHardness', v)} />
+                <ControlSlider label="高光层亮度 (Specular)" icon={<Sparkles className="w-3.5 h-3.5 opacity-50" />} value={params.specularOpacity} min={0} max={1} step={0.05} onChange={(v: number) => handleParamChange('specularOpacity', v)} />
+                <ControlSlider label="光影饱和度 (Saturation)" icon={<Droplets className="w-3.5 h-3.5 opacity-50" />} value={params.refractionSaturation} min={0} max={5} step={0.1} onChange={(v: number) => handleParamChange('refractionSaturation', v)} />
                 {activeUI === 'playground' && (
                   <>
-                    <div className="h-px bg-white/10 my-4" />
+                    <div className="h-px bg-white/10 my-2" />
                     <ControlSlider label="组件宽度" icon={<Maximize2 className="w-3.5 h-3.5" />} value={params.pgWidth} min={100} max={800} onChange={(v: number) => handleParamChange('pgWidth', v)} />
                     <ControlSlider label="组件高度" icon={<Maximize2 className="w-3.5 h-3.5" />} value={params.pgHeight} min={100} max={600} onChange={(v: number) => handleParamChange('pgHeight', v)} />
                   </>
