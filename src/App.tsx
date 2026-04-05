@@ -36,6 +36,7 @@ import {
   Info,
   Sparkles,
   Github,
+  Twitter,
   ExternalLink,
   Plane as Airplane
 } from 'lucide-react';
@@ -132,13 +133,22 @@ export default function App() {
       )}
 
       {/* Top Navigation Bar */}
-      <header className="relative z-50 w-full px-8 py-6 flex justify-between items-center bg-transparent">
-        <div className="flex items-center gap-10">
-          <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setIsDemoStarted(false)}>
-            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-3xl border border-white/10 shadow-2xl group-hover:bg-white/20 transition-all">
-              <Droplets className="w-5 h-5 text-blue-400" />
-            </div>
-            <span className="text-xl font-bold tracking-tight">LiquidGlass</span>
+      <header className="relative z-50 w-full px-6 md:px-8 py-4 md:py-6 flex justify-between items-center bg-transparent">
+        <div className="flex items-center gap-4 md:gap-10">
+          <div className="flex items-center gap-2.5 md:gap-3 group cursor-pointer" onClick={() => setIsDemoStarted(false)}>
+            {/* logo 按钮 */}
+            <GlassComponent
+              id="logo-glass"
+              width={32}
+              height={32}
+              params={{ ...params, bezelWidth: 10, scaleRatio: 0.3, blur: 0, radius: 16 }}
+              sceneUrl={isDemoStarted ? SCENES[activeScene].url : undefined}
+            >
+              <div className="w-full h-full flex items-center justify-center group-hover:bg-white/10 transition-all">
+                <Droplets className="w-5 h-5 text-blue-400" />
+              </div>
+            </GlassComponent>
+            <span className="text-xl font-black tracking-[-0.03em] font-heading bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">LiquidGlass</span>
           </div>
 
           {/* === 顶部导航状态栏与选项卡切换 (Nav Pill) === */}
@@ -178,10 +188,10 @@ export default function App() {
           )}
         </div>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 md:gap-8">
           {isDemoStarted && (
             <>
-              <div className="flex items-center gap-5 text-white/40 font-medium text-sm">
+              <div className="hidden sm:flex items-center gap-5 text-white/40 font-medium text-sm">
                 <Signal className="w-4 h-4" />
                 <Wifi className="w-4 h-4" />
                 <div className="flex items-center gap-1.5 px-3 py-1 bg-white/5 rounded-full border border-white/5">
@@ -191,9 +201,9 @@ export default function App() {
               </div>
               <button
                 onClick={() => setIsControlsOpen(!isControlsOpen)}
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all shadow-lg"
+                className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all shadow-lg overflow-hidden group/btn"
               >
-                <Settings2 className="w-4 h-4 text-white/60" />
+                <Settings2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/60 group-hover/btn:rotate-90 transition-transform duration-500" />
               </button>
             </>
           )}
@@ -236,11 +246,11 @@ export default function App() {
                     key={SCENES[activeScene].name}
                     initial={{ y: 10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="text-5xl font-bold tracking-tight mb-3"
+                    className="text-6xl font-black tracking-tight mb-4 font-heading"
                   >
                     {SCENES[activeScene].name}
                   </motion.h2>
-                  <p className="text-white/30 uppercase tracking-[0.4em] text-[9px] font-bold">折射引擎 v1.2</p>
+                  <p className="text-white/40 uppercase tracking-[0.5em] text-[10px] font-extrabold font-heading">Refraction Engine v1.2</p>
                 </div>
                 <button onClick={nextScene} className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all group shadow-xl">
                   <ChevronRight className="w-5 h-5 text-white/30 group-hover:text-white" />
@@ -504,7 +514,7 @@ export default function App() {
                           <input
                             type="text"
                             placeholder="搜索应用、文件或更多内容..."
-                            className="bg-transparent border-none outline-none text-xl w-full placeholder:text-white/40 font-semibold tracking-tight"
+                            className="bg-transparent border-none outline-none text-xl w-full placeholder:text-white/40 font-semibold tracking-tight font-sans"
                             autoFocus
                           />
                           <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/20 text-[11px] font-bold text-white/80 border border-white/20 shadow-sm">
@@ -568,15 +578,18 @@ export default function App() {
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
             className="absolute right-6 top-1/2 -translate-y-1/2 z-[200]"
           >
-            <div className="w-[300px] bg-[#0a0a0b]/80 backdrop-blur-3xl rounded-[32px] border border-white/10 p-6 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto custom-scrollbar">
-              <div className="flex items-center justify-between mb-6 sticky top-0 bg-[#0a0a0b]/90 backdrop-blur-3xl pb-2 z-10">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">光学引擎参数控制</span>
-                <button onClick={() => setIsControlsOpen(false)} className="w-6 h-6 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors">
-                  <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                </button>
+            <div className="w-[310px] bg-[#0a0a0b]/85 backdrop-blur-3xl rounded-[28px] border border-white/10 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] max-h-[85vh] overflow-y-auto overflow-x-hidden custom-scrollbar relative">
+              {/* Header Mask: Fixed positioning check, removed negative margins */}
+              <div className="sticky top-0 z-20 px-7 pt-6 pb-10 mb-[-32px] bg-gradient-to-b from-[#0a0a0b] via-[#0a0a0b]/95 to-transparent pointer-events-none">
+                <div className="flex items-center justify-between w-full pointer-events-auto">
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/50 font-heading">参数控制中心</span>
+                  <button onClick={() => setIsControlsOpen(false)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-all border border-white/5 shadow-inner">
+                    <ChevronRight className="w-4 h-4 text-white/40" />
+                  </button>
+                </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="px-7 pt-4 pb-12 space-y-7 relative z-10">
                 <ControlSlider label="厚度 (Thickness)" icon={<Layers className="w-3.5 h-3.5 opacity-50" />} value={params.glassThickness} min={1} max={150} onChange={(v: number) => handleParamChange('glassThickness', v)} />
                 <ControlSlider label="倒角参数 (Bezel Width)" icon={<Maximize2 className="w-3.5 h-3.5 opacity-50" />} value={params.bezelWidth} min={1} max={30} onChange={(v: number) => handleParamChange('bezelWidth', v)} />
                 <ControlSlider label="边缘曲率 (Radius)" icon={<Sun className="w-3.5 h-3.5 opacity-50" />} value={params.radius} min={0} max={80} onChange={(v: number) => handleParamChange('radius', v)} />
@@ -600,19 +613,81 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <footer className="relative w-full border-t border-white/5 bg-[#0a0a0b]/80 backdrop-blur-3xl px-12 py-8 flex flex-col md:flex-row justify-between items-center text-[12px] font-medium text-white/40 mt-auto z-[60]">
-        <div className="flex items-center gap-3">
-          <div className="w-1.5 h-1.5 rounded-full bg-white/60" />
-          <span className="tracking-[0.1em] uppercase text-white/60">LiquidGlass Engine ™</span>
-        </div>
-        <div className="flex gap-8 mt-4 md:mt-0 uppercase tracking-widest text-[10px]">
-          <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
-          <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
-          <span className="hover:text-white transition-colors cursor-pointer flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-white/30" /> System Status
-          </span>
-        </div>
-      </footer>
+      {/* Footer: Conditional rendering - Only on Landing Page */}
+      {!isDemoStarted && (
+        <footer className="relative w-full border-t border-white/5 bg-[#0a0a0b]/40 backdrop-blur-3xl px-6 md:px-12 py-12 md:py-16 mt-auto z-[60]">
+          <div className="max-w-[1400px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 md:gap-8">
+
+            {/* Brand & Mission Column */}
+            <div className="col-span-1 lg:col-span-2 space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-400/20 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+                  <Droplets className="w-4 h-4 text-blue-400" />
+                </div>
+                <span className="text-xl font-black tracking-[-0.03em] font-heading text-white/90">LiquidGlass</span>
+              </div>
+              <p className="text-[13px] text-white/30 leading-relaxed max-w-[280px] font-medium tracking-wide">
+                基于物理折射原理打造的高性能 Web 渲染引擎，为现代空间化界面（Spatial UI）提供极致的光学交互方案。
+              </p>
+              <div className="flex items-center gap-5 pt-2">
+                <button className="text-white/20 hover:text-white transition-all"><Github className="w-5 h-5" /></button>
+                <button className="text-white/20 hover:text-white transition-all"><Twitter className="w-5 h-5" /></button>
+                <button className="text-white/20 hover:text-white transition-all"><ExternalLink className="w-5 h-5" /></button>
+              </div>
+            </div>
+
+            {/* Nav Column 1: Engine */}
+            <div className="space-y-6">
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-white/40 font-heading">光学引擎</h4>
+              <ul className="space-y-3.5 text-[12px] font-semibold text-white/20">
+                <li><a href="#" className="hover:text-white transition-colors">核心架构 (Core)</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">折射算法 (Physics)</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">高光层处理 (Specular)</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">实时渲染流程</a></li>
+              </ul>
+            </div>
+
+            {/* Nav Column 2: Developer */}
+            <div className="space-y-6">
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-white/40 font-heading">开发者资源</h4>
+              <ul className="space-y-3.5 text-[12px] font-semibold text-white/20">
+                <li><a href="#" onClick={() => navigate('/docs')} className="hover:text-white transition-colors">官方技术文档</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Nuxt 集成方案</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">API 参考指南</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">常见问题解答</a></li>
+              </ul>
+            </div>
+
+            {/* Nav Column 3: Status */}
+            <div className="space-y-6">
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-white/40 font-heading">支持与合规</h4>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-green-500/5 border border-green-500/10 w-fit">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-green-400/80">运行正常</span>
+                </div>
+                <ul className="space-y-3.5 text-[12px] font-semibold text-white/20">
+                  <li><a href="#" className="hover:text-white transition-colors">隐私政策协议</a></li>
+                  <li><a href="#" className="hover:text-white transition-colors">开源协议</a></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="max-w-[1400px] mx-auto pt-12 md:pt-16 mt-12 md:mt-16 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <p className="text-[10px] md:text-[11px] font-bold text-white/20 uppercase tracking-[0.2em] text-center sm:text-left">
+              © 2026 LIQUIDGLASS ENGINE ™. ALL RIGHTS RESERVED.
+            </p>
+            <div className="flex items-center gap-4 md:gap-6 flex-wrap justify-center">
+              <span className="text-[9px] md:text-[10px] font-black text-white/10 tracking-[0.3em] uppercase">Hardware Accelerated</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-white/10 hidden sm:block" />
+              <span className="text-[9px] md:text-[10px] font-black text-white/10 tracking-[0.3em] uppercase">Spatial UI v1.2</span>
+            </div>
+          </div>
+        </footer>
+      )}
 
     </div>
   );
@@ -690,15 +765,19 @@ export function GlassComponent({ id, width, height, maxWidth, params, sceneUrl, 
           willChange: 'filter'
         }}
       >
-        <img
-          src={sceneUrl}
-          className="absolute w-[100vw] h-[100vh] object-cover opacity-100 max-w-none"
-          style={{
-            transform: `translate3d(${offset.x}px, ${offset.y}px, 0)`,
-            pointerEvents: 'none'
-          }}
-          referrerPolicy="no-referrer"
-        />
+        {sceneUrl ? (
+          <img
+            src={sceneUrl}
+            className="absolute w-[100vw] h-[100vh] object-cover opacity-100 max-w-none"
+            style={{
+              transform: `translate3d(${offset.x}px, ${offset.y}px, 0)`,
+              pointerEvents: 'none'
+            }}
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[#0a0a0b]" />
+        )}
       </div>
 
       {/* 3. Sharp UI Layer (This defines the size if width/height is auto) */}
@@ -727,23 +806,25 @@ export function GlassComponent({ id, width, height, maxWidth, params, sceneUrl, 
 
 function ControlSlider({ label, value, min, max, step = 1, onChange, icon }: any) {
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2.5 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+    <div className="space-y-4 group/slider">
+      <div className="flex justify-between items-center px-1">
+        <div className="flex items-center gap-2.5 text-[10px] font-extrabold text-white/30 uppercase tracking-[0.2em] font-heading group-hover/slider:text-white/60 transition-colors">
           {icon}
           <span>{label}</span>
         </div>
-        <span className="text-[10px] font-mono text-white/50 bg-white/5 px-2.5 py-1 rounded-md border border-white/5">{value}</span>
+        <span className="text-[10px] font-mono text-white/60 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5 group-hover/slider:bg-white/10 group-hover/slider:border-white/10 group-hover/slider:text-white transition-all tabular-nums">{value}</span>
       </div>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full h-1 bg-white/5 rounded-lg appearance-none cursor-pointer accent-white hover:accent-blue-400 transition-all"
-      />
+      <div className="px-1">
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(parseFloat(e.target.value))}
+          className="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-white hover:accent-blue-400 transition-all shadow-inner"
+        />
+      </div>
     </div>
   );
 }

@@ -27,7 +27,7 @@ export function HomeUI({ onStart, onOpenDocs, sceneUrl, globalParams }: HomeUIPr
           className="inline-flex items-center gap-4 px-5 py-2 rounded-full border border-white/5 bg-white/[0.02]"
         >
           <div className="w-1.5 h-1.5 rounded-full bg-white/60 animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.4)]" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">v1.2.5 Spatial Interface</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/50 font-heading">v1.2.5 Spatial Interface</span>
         </motion.div>
 
         <div className="relative">
@@ -37,7 +37,7 @@ export function HomeUI({ onStart, onOpenDocs, sceneUrl, globalParams }: HomeUIPr
             transition={{ duration: 1.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10"
           >
-            <h1 className="text-[160px] font-black tracking-[-0.05em] leading-[0.8] mb-12 text-transparent bg-clip-text bg-gradient-to-b from-white via-white/90 to-white/30 selection:bg-transparent">
+            <h1 className="text-[160px] font-black tracking-[-0.05em] leading-[0.8] mb-12 text-transparent bg-clip-text bg-gradient-to-b from-white via-white/90 to-white/30 selection:bg-transparent font-heading">
               Glass.<br />
               Refined.
             </h1>
@@ -61,9 +61,9 @@ export function HomeUI({ onStart, onOpenDocs, sceneUrl, globalParams }: HomeUIPr
             params={globalParams || { radius: 32, blur: 2, glassThickness: 60, bezelWidth: 25, refractionSaturation: 1.6 }}
           >
             <div className="p-8 text-left h-full flex flex-col justify-between cursor-default">
-              <div className="text-[10px] text-white/30 uppercase tracking-[0.3em] font-bold">{m.label}</div>
+              <div className="text-[10px] text-white/40 uppercase tracking-[0.3em] font-black font-heading">{m.label}</div>
               <div>
-                <h3 className="text-4xl font-black mb-2 tracking-tighter text-white/90">{m.value}</h3>
+                <h3 className="text-4xl font-black mb-2 tracking-tighter text-white/90 font-heading">{m.value}</h3>
                 <p className="text-[13px] text-white/30 font-medium tracking-wide">{m.desc}</p>
               </div>
             </div>
