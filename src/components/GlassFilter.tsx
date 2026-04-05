@@ -39,29 +39,29 @@ export const GlassFilter: React.FC<GlassFilterProps> = ({
   const bezelHeightFn = Tu.fn;
 
   // 1. Calculate displacement map
-  const x = useMemo(() => gu(glassThickness, bezelWidth, bezelHeightFn, refractiveIndex), 
+  const x = useMemo(() => gu(glassThickness, bezelWidth, bezelHeightFn, refractiveIndex),
     [glassThickness, bezelWidth, refractiveIndex]);
-    
+
   const p = useMemo(() => Math.max(...x.map(q => Math.abs(q))), [x]);
-  
+
   const P = useMemo(() =>
     yu(width, height, width, height, radius, bezelWidth, p, x, dpr),
     [width, height, radius, bezelWidth, p, x, dpr]
   );
-  
+
   const b = useMemo(() => De(P), [P]);
 
   // 2. Calculate specular layer
   // User logic uses bezelWidth (or a fix value 50) for the s parameter
-  const T = useMemo(() => xu(width, height, radius, bezelWidth, 1.047, dpr, specularHardness), 
+  const T = useMemo(() => xu(width, height, radius, bezelWidth, 1.047, dpr, specularHardness),
     [width, height, radius, bezelWidth, dpr, specularHardness]);
-    
+
   const M = useMemo(() => De(T), [T]);
 
   // 3. Magnifying displacement map
-  const A = useMemo(() => magnifyingScale !== undefined ? vu(width, height) : undefined, 
+  const A = useMemo(() => magnifyingScale !== undefined ? vu(width, height) : undefined,
     [magnifyingScale, width, height]);
-    
+
   const V = useMemo(() => A ? De(A) : undefined, [A]);
 
   const C = p * scaleRatio;
@@ -73,11 +73,19 @@ export const GlassFilter: React.FC<GlassFilterProps> = ({
   return (
     <svg style={{ display: "none" }} colorInterpolationFilters="sRGB">
       <defs>
-        <filter id={id} x="-50%" y="-50%" width="200%" height="200%">
+        <filter 
+          id={id} 
+          x={-width * 0.2} 
+          y={-height * 0.2} 
+          width={width * 1.4} 
+          height={height * 1.4} 
+          primitiveUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
           {/* Magnifying layer */}
           {magnifyingScale !== undefined && V && (
             <>
-              <feImage href={V} result="magnifying_displacement_map" x="0" y="0" width={width} height={height} />
+              <feImage href={V} result="magnifying_displacement_map" x="0" y="0" width={width} height={height} preserveAspectRatio="none" />
               <feDisplacementMap
                 in="SourceGraphic"
                 in2="magnifying_displacement_map"
@@ -85,6 +93,7 @@ export const GlassFilter: React.FC<GlassFilterProps> = ({
                 xChannelSelector="R"
                 yChannelSelector="G"
                 result="magnified_source"
+                colorInterpolationFilters="sRGB"
               />
             </>
           )}
@@ -106,7 +115,7 @@ export const GlassFilter: React.FC<GlassFilterProps> = ({
             result="blurred_source"
           />
 
-          <feImage href={b} result="displacement_map" x="0" y="0" width={width} height={height} />
+          <feImage href={b} result="displacement_map" x="0" y="0" width={width} height={height} preserveAspectRatio="none" />
 
           <feDisplacementMap
             in="blurred_source"
@@ -115,6 +124,7 @@ export const GlassFilter: React.FC<GlassFilterProps> = ({
             xChannelSelector="R"
             yChannelSelector="G"
             result="displaced"
+            colorInterpolationFilters="sRGB"
           />
 
           <feColorMatrix
@@ -124,7 +134,7 @@ export const GlassFilter: React.FC<GlassFilterProps> = ({
             result="displaced_saturated"
           />
 
-          <feImage href={M} result="specular_layer" x="0" y="0" width={width} height={height} />
+          <feImage href={M} result="specular_layer" x="0" y="0" width={width} height={height} preserveAspectRatio="none" />
 
           <feComposite
             in="displaced_saturated"
@@ -138,7 +148,8 @@ export const GlassFilter: React.FC<GlassFilterProps> = ({
           </feComponentTransfer>
 
           <feBlend in="specular_saturated" in2="displaced" mode="normal" result="withSaturation" />
-          <feBlend in="specular_faded" in2="withSaturation" mode="normal" />
+          <feBlend in="specular_faded" in2="withSaturation" mode="normal" result="final_output" />
+          <feComposite in="final_output" in2="SourceAlpha" operator="in" />
         </filter>
       </defs>
     </svg>

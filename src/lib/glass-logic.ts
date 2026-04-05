@@ -50,7 +50,11 @@ export function yu(t: number, e: number, n: number, s: number, i: number, o: num
     const c = t * u;
     const h = e * u;
     const f = new ImageData(c, h);
-    new Uint32Array(f.data.buffer).fill(4278222976); // Alpha 255
+    
+    // CRITICAL FIX: Initialize with 128 (neutral displacement) instead of 0.
+    // In Little Endian Uint32: f.data[0]=0x80 (R), f.data[1]=0x80 (G), f.data[2]=0x00 (B), f.data[3]=0xFF (A)
+    new Uint32Array(f.data.buffer).fill(0xFF008080); 
+
     const m = i * u;
     const y = o * u;
     const v = m ** 2;
